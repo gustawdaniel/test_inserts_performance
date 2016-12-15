@@ -69,10 +69,10 @@ my $k0=1;
 #----------------------------------#
 #        wget file from wiki       #
 #----------------------------------#
-my $imin=3;
-my $imax=10;
+my $imin=1;
+my $imax=1;
 for(my $i=$imin;$i<=$imax;$i++){
-    my $k=100000*$i;
+    my $k=1000*$i;
 #    system("(http -b --timeout=3600 GET localhost:8000/main/$n/$l/$k0/$k/1/1) > /dev/null 2>&1");
     $deleteStatement->execute();
 

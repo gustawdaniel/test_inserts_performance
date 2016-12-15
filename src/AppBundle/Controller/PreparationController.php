@@ -7,13 +7,13 @@ use AppBundle\Model\SchemaGenerator;
 use Doctrine\DBAL\Schema\Comparator;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
-class PreparationController extends BaseController
+class PreparationController
 {
     /**
      * @Route("/", name="home")
      * @Route("/do/{n}")
      */
-    public function doAction($n=self::N,$action="do")
+    public function doAction($action="do")
     {
         $conn = $this->getDoctrine()->getConnection();
         $schema = (new SchemaGenerator($n))->generate();
