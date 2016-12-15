@@ -13,6 +13,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 class BaseController extends Controller
 {
     const N = 10;
-    const L = 10;
+    const L = 50;
     const K = 1000;
 }

@@ -69,7 +69,7 @@ class SchemaGenerator
         $log->addColumn("l", "smallint",array("unsigned" => true));
         $log->addColumn("k0", "integer",array("unsigned" => true));
         $log->addColumn("k", "integer",array("unsigned" => true));
-        $log->addColumn("time", "float",array("unsigned" => true));
+        $log->addColumn("execution_time", "float");
         $log->addColumn("operation", "string",array());
         $log->setPrimaryKey(array("id"));
     }
