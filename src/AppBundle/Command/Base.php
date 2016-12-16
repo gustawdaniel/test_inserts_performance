@@ -23,7 +23,7 @@ class Base extends ContainerAwareCommand
     protected function initialize(InputInterface $input, OutputInterface $output)
     {
 //        var_dump($input->getArguments());
-//        var_dump($input->getArgument('K'));
+//        var_dump($input->getOptions());
 //        var_dump(gettype($input->getArgument('K')));die();
 
         $this->conn = $this->getContainer()->get('doctrine')->getConnection();

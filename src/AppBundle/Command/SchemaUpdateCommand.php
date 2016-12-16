@@ -20,7 +20,8 @@ use Symfony\Component\Console\Input\InputArgument;
 
 class SchemaUpdateCommand extends Base
 {
-    private $n;
+    private $n,$q;
+
 
     public function configure()
     {
@@ -34,6 +35,7 @@ class SchemaUpdateCommand extends Base
     protected function interact(InputInterface $input, OutputInterface $output)
     {
         $this->n = $input->getArgument('N') ?: $this->getContainer()->getParameter('N');
+        $this->q = $input->getOption('quiet');
 
         if (!$input->getOption('force') && !$input->getOption('dump-sql') ) {
             $output->writeln('Please run the operation by passing one - or both - of the following options:');
@@ -56,18 +58,22 @@ class SchemaUpdateCommand extends Base
 
     private function rebuildDatabase(OutputInterface $output, $queries)
     {
-        $output->writeln('Updating database schema...');
+        if(!$this->q) {
+            $output->writeln('Updating database schema...');
 
-        $progress = new ProgressBar($output, count($queries));
-        $progress->setFormat('very_verbose');
-        $progress->start();
+            $progress = new ProgressBar($output, count($queries));
+            $progress->setFormat('very_verbose');
+            $progress->start();
+        }
         foreach($queries as $key => $query) {
             $this->conn->prepare($query)->execute();
-            $progress->advance();
+            $this->q?:$progress->advance();
         }
-        $progress->finish();
+        if(!$this->q) {
+            $progress->finish();
 
-        $pluralization = (1 === count($queries)) ? 'query was' : 'queries were';
-        $output->writeln(sprintf("\n".'Database schema updated successfully! "<info>%s</info>" %s executed', count($queries), $pluralization));
+            $pluralization = (1 === count($queries)) ? 'query was' : 'queries were';
+            $output->writeln(sprintf("\n".'Database schema updated successfully! "<info>%s</info>" %s executed', count($queries), $pluralization));
+        }
     }
 }
