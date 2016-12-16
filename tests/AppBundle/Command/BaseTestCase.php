@@ -18,6 +18,7 @@ use Doctrine\DBAL\Driver\Connection;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
+use Doctrine\Bundle\DoctrineBundle\Command\CreateDatabaseDoctrineCommand;
 
 class BaseTestCase extends KernelTestCase
 {
@@ -59,7 +60,7 @@ class BaseTestCase extends KernelTestCase
 
         $this->app = new Application(self::$kernel);
 
-        $objects=[new DropCommand(),new CreateCommand(),new SchemaUpdateCommand(),new FixturesCommand()];
+        $objects=[new DropCommand(),new CreateDatabaseDoctrineCommand(),new SchemaUpdateCommand(),new FixturesCommand()];
         foreach($objects as $object)
         {
             $this->app->add($object);

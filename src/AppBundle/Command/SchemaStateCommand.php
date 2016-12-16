@@ -21,17 +21,13 @@ class SchemaStateCommand extends Base
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        if(!$this->conn->getDatabase()){
-            $output->writeln('Database doe\'s not exists!');
-            unset($this->conn); return 0;
-        }
 
-        $queries = [
-            'tables' => ["SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = ?",[$this->conn->getDatabase()]]
-        ];
 
-        if($queries['tables']<4){
-            $output->writeln('Schema is incorrect!');
+        $res['tables'] = $this->conn->fetchColumn("SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = ?",[$this->conn->getDatabase()]);
+
+
+        if($res['tables']<4){
+            $output->writeln('<fg=red>Schema is incorrect!</>');
             unset($this->conn); return 0;
         }
 
@@ -39,19 +35,12 @@ class SchemaStateCommand extends Base
 
         foreach($tables as $table)
         {
-            $queries[$table.'_rows'] = ['SELECT COUNT(*) FROM '.$table.' where 1=?;',[1]];
+            $queries[$table.'_rows'] = ['SELECT COUNT(*) FROM '.$table];
         }
 
         foreach($queries as $name =>$query)
         {
-
-//        $pre = $this->conn->prepare($query[0]);
-//        $pre->bindValue($query[1][0]);
-////            $pre->execute();
-//
-//            var_dump($pre->bindParam($query[1]));
-//            die("ok");
-            $res[$name] = $this->conn->fetchColumn($query[0],$query[1]);
+            $res[$name] = $this->conn->fetchColumn($query[0]);
         }
 
         $output->writeln('States of database:');

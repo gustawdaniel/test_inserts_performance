@@ -25,7 +25,9 @@ class Base extends ContainerAwareCommand
 //        var_dump($input->getArguments());
 //        var_dump($input->getArgument('K'));
 //        var_dump(gettype($input->getArgument('K')));die();
+
         $this->conn = $this->getContainer()->get('doctrine')->getConnection();
+
     }
 
 }
