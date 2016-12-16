@@ -47,7 +47,7 @@ class SchemaGenerator
     {
         for($i=1;$i<=2;$i++)
         {
-            $this->main[$i] = $schema->createTable("main_".$i);
+            $this->main[$i] = $schema->createTable("major_".$i);
             $this->main[$i]->addColumn("id", "integer");
             for($j=1;$j<=$this->N;$j++)
             {

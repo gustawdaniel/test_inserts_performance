@@ -9,7 +9,7 @@
 namespace Tests\AppBundle\Command;
 
 
-use AppBundle\Command\FixtureCommand;
+use AppBundle\Command\FixturesCommand;
 use AppBundle\Command\SchemaUpdateCommand;
 use Doctrine\ORM\Tools\Console\Command\SchemaTool\CreateCommand;
 use Doctrine\ORM\Tools\Console\Command\SchemaTool\DropCommand;
@@ -59,7 +59,7 @@ class BaseTestCase extends KernelTestCase
 
         $this->app = new Application(self::$kernel);
 
-        $objects=[new DropCommand(),new CreateCommand(),new SchemaUpdateCommand(),new FixtureCommand()];
+        $objects=[new DropCommand(),new CreateCommand(),new SchemaUpdateCommand(),new FixturesCommand()];
         foreach($objects as $object)
         {
             $this->app->add($object);
