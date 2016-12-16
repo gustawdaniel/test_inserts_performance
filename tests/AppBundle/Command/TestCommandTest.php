@@ -33,7 +33,7 @@ class TestCommandTest extends BaseTestCase
         $this->assertContains('1  log table with 2 rows', $this->output);
 
         $this->setCommand('app:test');
-        $this->doTest(['name'=>'first','N'=>1,'L'=>1,'K'=>1, 'no-log'=>true]);
+        $this->doTest(['name'=>'first','N'=>1,'L'=>1,'K'=>1, '--no-log'=>true]);
 
         $this->setCommand('app:schema:state');
         $this->doTest([]);
