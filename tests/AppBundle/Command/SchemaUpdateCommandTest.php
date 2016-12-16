@@ -8,73 +8,22 @@
 
 namespace Tests\AppBundle\Command;
 
-use AppBundle\Command\SchemaUpdateCommand;
-use Doctrine\ORM\Tools\Console\Command\SchemaTool\CreateCommand;
-use Doctrine\ORM\Tools\Console\Command\SchemaTool\DropCommand;
-use Symfony\Bundle\FrameworkBundle\Console\Application;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Console\Tester\CommandTester;
-use Doctrine\DBAL\Connection;
 use Symfony\Component\Console\Command\Command;
 
-class SchemaUpdateCommandTest extends KernelTestCase
+class SchemaUpdateCommandTest extends BaseTestCase
 {
-    /**
-     * @var Connection
-     */
-    private $conn;
-
-    /**
-     * @var Command
-     */
-    private $command;
-
-    /**
-     * @var CommandTester
-     */
-    private $commandTester;
-
-
-    private function resetDatabase()
-    {
-        $app = new Application(self::$kernel);
-        $app->add(new DropCommand());
-        $app->add(new CreateCommand());
-        (new CommandTester($app->find('doctrine:database:drop')))->execute(['--force' => true]);
-        (new CommandTester($app->find('doctrine:database:create')))->execute([]);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    protected function setUp()
-    {
-        self::bootKernel();
-        $this->resetDatabase();
-        $app = new Application(self::$kernel);
-        $app->add(new SchemaUpdateCommand());
-        $this->command = $app->find('app:schema:update');
-        $this->commandTester = new CommandTester($this->command);
-        $this->conn = static::$kernel->getContainer()->get('doctrine')->getConnection();
-    }
-
     public function testExecute()
     {
-        $this->commandTester->execute([]);
-        $this->assertContains('Please run the operation by passing one - or both - of the following options:', $this->commandTester->getDisplay());
+        $this->setCommand('app:schema:update');
 
-        $this->commandTester->execute(['N' => 1, '--force' => true, '--dump-sql' => true]);
-        $this->assertContains('ALTER TABLE', $this->commandTester->getDisplay());
+        $this->doTest([]);
+        $this->assertContains('Please run the operation by passing one - or both - of the following options:', $this->output);
 
-        $this->commandTester->execute(['N' => 2, '--force' => true]);
-        $this->assertContains('Database schema updated successfully!', $this->commandTester->getDisplay());
-    }
+        $this->doTest(['N' => 1, '--force' => true, '--dump-sql' => true]);
+        $this->assertContains('ALTER TABLE', $this->output);
 
-    protected function tearDown()
-    {
-        parent::tearDown();
-
-        $this->conn->close();
-        $this->conn = null; // avoid memory leaks
+        $this->doTest(['N' => 2, '--force' => true]);
+        $this->assertContains('Database schema updated successfully!', $this->output);
     }
 }
