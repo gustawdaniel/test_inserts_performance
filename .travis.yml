@@ -47,8 +47,13 @@ install:
 
 # Run script
 script:
+  - mkdir -p build/logs
   - phpunit
 
 # After a build, send email notification with the build results
 notifications:
   email: gustaw.daniel@gmail.com
+
+after_success:
+  # or enable logging
+  - travis_retry php vendor/bin/coveralls -v
