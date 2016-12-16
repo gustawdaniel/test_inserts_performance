@@ -94,10 +94,14 @@ class FixtureCommand extends ContainerAwareCommand
 
     protected function initialize(InputInterface $input, OutputInterface $output)
     {
+//        var_dump($input->getArguments());
+//        var_dump($input->getArgument('K'));
+//        var_dump(gettype($input->getArgument('K')));die();
+
         $this->conn = $this->getContainer()->get('doctrine')->getConnection();
         $this->n = $input->getArgument('N') ?: $this->getContainer()->getParameter('N');
         $this->l = $input->getArgument('L') ?: $this->getContainer()->getParameter('L');
-        $this->k = $input->getArgument('K') ?: $this->getContainer()->getParameter('K');
+        $this->k =  gettype($input->getArgument('K'))!="NULL" ? $input->getArgument('K') : $this->getContainer()->getParameter('K');
         $this->main = $input->getArgument('main') ?: 1;
         $this->table = $input->getArgument('table');
         $this->transaction = !$input->getOption('no-transaction');
@@ -111,6 +115,7 @@ class FixtureCommand extends ContainerAwareCommand
                 $this->k += $this->k0-1;
             }
         } else {
+            $this->append = false;
             $this->k0 =1;
         }
     }

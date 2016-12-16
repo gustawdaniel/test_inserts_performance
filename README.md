@@ -5,4 +5,4 @@ insert_test
 
 [![Coverage Status](https://coveralls.io/repos/github/gustawdaniel/test_inserts_performance/badge.svg?branch=master)](https://coveralls.io/github/gustawdaniel/test_inserts_performance?branch=master)
 
-A Symfony project created on December 13, 2016, 8:43 pm.
+Project aiming do tests on database.

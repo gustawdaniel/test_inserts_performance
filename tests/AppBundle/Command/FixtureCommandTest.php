@@ -37,5 +37,33 @@ class FixtureCommandTest extends BaseTestCase
         $this->doTest(['table'=>'major', 'N'=>10, 'L'=>50, 'K'=>5, '--append'=>true, 'main'=>2]);
         $res = $this->conn->fetchColumn('select count(*) from main_2');
         $this->assertEquals($res,5);
+
+        $this->doTest(['table'=>'major', 'N'=>10, 'L'=>50, 'K'=>0, '--no-transaction'=>true, 'main'=>2]);
+        $res = $this->conn->fetchColumn('select count(*) from main_2');
+        $this->assertEquals($res,0);
+
+        $t1=microtime(true);
+        $this->doTest(['table'=>'major', 'N'=>10, 'L'=>50, 'K'=>1000, '--no-transaction'=>true, 'main'=>2]);
+        $res = $this->conn->fetchColumn('select count(*) from main_2');
+        $this->assertEquals($res,1000);
+        $t2=microtime(true);
+
+        $this->doTest(['table'=>'major', 'N'=>10, 'L'=>50, 'K'=>0, 'main'=>2]);
+        $res = $this->conn->fetchColumn('select count(*) from main_2');
+        $this->assertEquals($res,0);
+
+        $t3=microtime(true);
+        $this->doTest(['table'=>'major', 'N'=>10, 'L'=>50, 'K'=>1000, 'main'=>2]);
+        $res = $this->conn->fetchColumn('select count(*) from main_2');
+        $this->assertEquals($res,1000);
+        $t4=microtime(true);
+
+        $this->assertGreaterThanOrEqual($t4-$t3,$t2-$t1);
+
+    }
+
+    function milliseconds() {
+        $mt = explode(' ', microtime());
+        return ((int)$mt[1]) * 1000 + ((int)round($mt[0] * 1000));
     }
 }
