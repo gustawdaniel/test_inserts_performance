@@ -45,8 +45,8 @@ class TestCommand extends Base
             {
                 // clear all data and rebuild schema
                 $this->executeWithLog('fixtures:load -q major '.$n.' 0 0',$n,0,0,'clear_major_before_reshape'); // deleting
-                $this->executeWithLog('fixtures:load -q minor '.$n.' 0',$n,0,0,'clear_minor_before_reshape'); // deleting
                 $this->executeWithLog('schema:update -fq '.$n,$n,0,0,'reshape'); // reshaping
+                $this->executeWithLog('fixtures:load -q minor '.$n.' 0',$n,0,0,'clear_minor_before_reshape'); // deleting
 
                 for($l=1;$l<=$this->l;$l++) // size of minor, l - rows in minor
                 {
@@ -89,8 +89,8 @@ class TestCommand extends Base
     private function log($n,$l,$k0,$k,$time,$name)
     {
         $st = $this->conn->executeQuery(
-            "INSERT INTO log (n,l,k0,k,execution_time,operation) VALUES (?,?,?,?,?,?)",
-            [$n,$l,$k0,$k,$time,$name]
+            "INSERT INTO log (n,l,k0,k,execution_time,operation,v) VALUES (?,?,?,?,?,?,?)",
+            [$n,$l,$k0,$k,$time,$name,2]
         );
     }
 }

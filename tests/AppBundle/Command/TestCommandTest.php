@@ -12,31 +12,34 @@ class TestCommandTest extends BaseTestCase
 {
     public function testExecute()
     {
-//        $this->setCommand('app:schema:update');
+        $this->setCommand('app:schema:update');
 
-//        $this->setCommand('app:schema:state');
-//        $this->doTest([]);
-//        $this->assertContains('1  log table with 0 rows', $this->output);
-//
-//        $this->setCommand('app:test');
-//        $this->doTest(['name'=>'first','N'=>1,'L'=>1,'K'=>1]);
-//
-//        $this->setCommand('app:schema:state');
-//        $this->doTest([]);
-//        $this->assertContains('1  log table with 1 rows', $this->output);
-//
-//        $this->setCommand('app:test');
-//        $this->doTest(['name'=>'first','N'=>1,'L'=>1,'K'=>1]);
-//
-//        $this->setCommand('app:schema:state');
-//        $this->doTest([]);
-//        $this->assertContains('1  log table with 2 rows', $this->output);
-//
-//        $this->setCommand('app:test');
-//        $this->doTest(['name'=>'first','N'=>1,'L'=>1,'K'=>1, '--no-log'=>true]);
-//
-//        $this->setCommand('app:schema:state');
-//        $this->doTest([]);
-//        $this->assertContains('1  log table with 2 rows', $this->output);
+        $log1 = $this->conn->fetchColumn("SELECT COUNT(*) FROM log");
+        var_dump($log1);
+
+
+        $this->setCommand('app:test');
+        $this->doTest(['name'=>'first','N'=>1,'L'=>1,'K'=>1]);
+
+        $log2 = $this->conn->fetchColumn("SELECT COUNT(*) FROM log");
+        var_dump($log2);
+
+        $this->setCommand('app:test');
+        $this->doTest(['name'=>'first','N'=>1,'L'=>1,'K'=>1]);
+
+        $log3 = $this->conn->fetchColumn("SELECT COUNT(*) FROM log");
+        var_dump($log3);
+
+        $this->setCommand('app:test');
+        $this->doTest(['name'=>'first','N'=>1,'L'=>1,'K'=>1, '--no-log'=>true]);
+
+        $log4 = $this->conn->fetchColumn("SELECT COUNT(*) FROM log");
+        var_dump($log4);
+
+
+        $this->assertEquals(0,$log1);
+        $this->assertEquals($log3,$log4);
+        $this->assertGreaterThan($log1,$log2);
+        $this->assertGreaterThan($log2,$log3);
     }
 }

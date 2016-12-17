@@ -8,7 +8,6 @@
  */
 namespace AppBundle\Model;
 
-use AppBundle\Controller\BaseController;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Schema\Table;
 
@@ -25,7 +24,7 @@ class SchemaGenerator
     {
         $this->main = [];
         $this->minor = [];
-        $this->N = $n ? $n : BaseController::N;
+        $this->N = $n ? $n : 10;
     }
 
     /**
@@ -69,6 +68,7 @@ class SchemaGenerator
         $log->addColumn("l", "smallint",array("unsigned" => true));
         $log->addColumn("k0", "integer",array("unsigned" => true));
         $log->addColumn("k", "integer",array("unsigned" => true));
+        $log->addColumn("v", "integer",array("unsigned" => true));
         $log->addColumn("execution_time", "float");
         $log->addColumn("operation", "string",array());
         $log->setPrimaryKey(array("id"));
