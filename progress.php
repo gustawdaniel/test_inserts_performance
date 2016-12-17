@@ -217,3 +217,5 @@ for($done = 0; $done <= $tasks; $done++){
     usleep((rand() % 127)*100);
     $progress->update($done, $tasks);
 }
+
+var_dump($progres)

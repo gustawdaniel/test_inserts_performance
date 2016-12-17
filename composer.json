@@ -1,5 +1,6 @@
 {
     "require": {
-        "doctrine/dbal": "^2.5"
+        "doctrine/dbal": "^2.5",
+        "guiguiboy/php-cli-progress-bar": "dev-master"
     }
 }

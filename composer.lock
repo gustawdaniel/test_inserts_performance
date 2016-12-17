@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "f31e3c78272ab5db453449e5043d0b4c",
-    "content-hash": "23f0c503ef7979d7c2719a5bb810d271",
+    "hash": "604d37d63e8a20bda34efc7d357405b7",
+    "content-hash": "469c05be613638858f782c61cd85fef0",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -475,12 +475,58 @@
                 "parser"
             ],
             "time": "2014-09-09 13:34:57"
+        },
+        {
+            "name": "guiguiboy/php-cli-progress-bar",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/guiguiboy/PHP-CLI-Progress-Bar.git",
+                "reference": "7d3eb61c1f0c164b9c3139af694b2d38171e4d04"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/guiguiboy/PHP-CLI-Progress-Bar/zipball/7d3eb61c1f0c164b9c3139af694b2d38171e4d04",
+                "reference": "7d3eb61c1f0c164b9c3139af694b2d38171e4d04",
+                "shasum": ""
+            },
+            "require": {
+                "ext-mbstring": "*",
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "ProgressBar": "."
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Guillaume",
+                    "email": "guillaume.bretou@gmail.com"
+                }
+            ],
+            "description": "Progress bar for PHP CLI scripts",
+            "homepage": "https://github.com/guiguiboy/PHP-CLI-Progress-Bar",
+            "keywords": [
+                "bar",
+                "cli",
+                "command-line",
+                "progress"
+            ],
+            "time": "2014-11-19 13:12:00"
         }
     ],
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "guiguiboy/php-cli-progress-bar": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": [],

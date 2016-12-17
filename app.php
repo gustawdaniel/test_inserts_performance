@@ -5,7 +5,6 @@ require_once 'model/SchemaGenerator.php';
 use Doctrine\DBAL\DriverManager;
 use Model\SchemaGenerator;
 use Doctrine\DBAL\Schema\Comparator;
-use Symfony\Component\Console\Helper\ProgressBar;
 
 $connectionParams = array(
     'dbname' => 'training',
@@ -46,3 +45,4 @@ function progressBar($done, $total) {
     $write = sprintf("\033[0G\033[2K[%'={$perc}s>%-{$left}s] - $perc%% - $done/$total", "", "");
     fwrite(STDERR, $write);
 }
+
