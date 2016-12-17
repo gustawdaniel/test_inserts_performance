@@ -42,9 +42,6 @@ class FixturesCommand extends Base
 
         $this->interact($input,$output); // What the fuck? I do not know why it do not append automatically!
 
-//        var_dump($this->n,$this->l,$this->transaction,$this->append,$this->table,$this->k0,$this->k,$this->major,$this->q);
-//        die();
-
         switch ($input->getArgument('table')) {
             case 'minor':
                 if(!$this->q) {
@@ -54,9 +51,8 @@ class FixturesCommand extends Base
                     $progress->setRedrawFrequency(25);
                 }
 
-
                 for($i=1;$i<=$this->n;$i++){
-//                    die("aaaaaaaaaa");
+                    if(!$this->append) {$this->conn->delete('minor_'.$i,[1=>1]); }
 
                     $this->conn->delete('minor_'.$i,[1=>1]);
                     for($j=1;$j<=$this->l;$j++){
@@ -109,7 +105,7 @@ class FixturesCommand extends Base
     protected function interact(InputInterface $input, OutputInterface $output)
     {
         $this->n = $input->getArgument('N') ?: $this->getContainer()->getParameter('N');
-        $this->l = $input->getArgument('L') ?: $this->getContainer()->getParameter('L');
+        $this->l =  gettype($input->getArgument('L'))!="NULL" ? $input->getArgument('L') : $this->getContainer()->getParameter('L');
         $this->k =  gettype($input->getArgument('K'))!="NULL" ? $input->getArgument('K') : $this->getContainer()->getParameter('K');
         $this->major = $input->getArgument('major') ?: 1;
         $this->table = $input->getArgument('table');
