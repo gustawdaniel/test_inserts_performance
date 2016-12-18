@@ -43,28 +43,28 @@ class FixturesCommand extends Base
         $this->interact($input,$output); // What the fuck? I do not know why it do not append automatically!
 
         switch ($input->getArgument('table')) {
-            case 'minor':
-                if(!$this->q) {
-                    $progress = new ProgressBar($output, $this->n * $this->l);
-                    $progress->setFormat('very_verbose');
-                    $progress->start();
-                    $progress->setRedrawFrequency(25);
-                }
-
-                for($i=1;$i<=$this->n;$i++){
-                    if(!$this->append) {$this->conn->delete('minor_'.$i,[1=>1]); }
-
-                    $this->conn->delete('minor_'.$i,[1=>1]);
-                    for($j=1;$j<=$this->l;$j++){
-                        $this->conn->insert('minor_'.$i, array('id' => $j));
-                        $this->q?:$progress->advance();
-                    }
-                }
-                if(!$this->q) {
-                    $progress->finish();
-                    $output->writeln("\n" . 'Created <info>' . $this->l . '</info> rows in <info>' . $this->n . '</info> tables. In sum <info>' . $this->l * $this->n . '</info> inserts.');
-                }
-                break;
+//            case 'minor':
+//                if(!$this->q) {
+//                    $progress = new ProgressBar($output, $this->n * $this->l);
+//                    $progress->setFormat('very_verbose');
+//                    $progress->start();
+//                    $progress->setRedrawFrequency(25);
+//                }
+//
+//                for($i=1;$i<=$this->n;$i++){
+//                    if(!$this->append) {$this->conn->delete('minor_'.$i,[1=>1]); }
+//
+//                    $this->conn->delete('minor_'.$i,[1=>1]);
+//                    for($j=1;$j<=$this->l;$j++){
+//                        $this->conn->insert('minor_'.$i, array('id' => $j));
+//                        $this->q?:$progress->advance();
+//                    }
+//                }
+//                if(!$this->q) {
+//                    $progress->finish();
+//                    $output->writeln("\n" . 'Created <info>' . $this->l . '</info> rows in <info>' . $this->n . '</info> tables. In sum <info>' . $this->l * $this->n . '</info> inserts.');
+//                }
+//                break;
             case 'major':
                 if(!$this->append) { $this->conn->delete('major_'.$this->major,[1=>1]); }
                 if($this->transaction) {$this->conn->beginTransaction();}
