@@ -94,19 +94,11 @@ class SchemaGenerator
 
     /**
      * @param Connection $conn
-     * @param String $config
      * @throws \Exception $conn
      */
-    public function apply($conn,$config)
+    public function apply($conn)
     {
-        if($config=="reset") {
-            $schema = $this->generate(false,false); // delete all table leaving log only
-        } elseif ($config=="major") {
-            $schema = $this->generate(true,false); // delete only major tables
-        } else {
-            throw new \Exception("Bad configuration of apply method.");
-        }
-        $this->execute($schema,$conn); // prepare base before regeneration
+        $this->execute($this->generate(false,false),$conn); // delete all table leaving log only prepare base before regeneration
         $this->execute($this->generate(true,true),$conn); // create all tables
     }
 

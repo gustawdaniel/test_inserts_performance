@@ -35,7 +35,7 @@ $progress->getRegistry()->setValue("state", "Progress");
 for($n=1;$n<=$N;$n++){ // number of minor tables in test
 
     $generator = new SchemaGenerator($n);
-    $generator->apply($conn,"reset"); // rebuild database and clear it
+    $generator->apply($conn); // rebuild database and clear it
 
     for($l=1;$l<=$L;$l++){ // number of rows minor table
 
@@ -44,7 +44,6 @@ for($n=1;$n<=$N;$n++){ // number of minor tables in test
         }
 
         for($k=1;$k<=$K;$k++){//number of rows in major table
-//            $generator->apply($conn,"major"); // remove and add major tables
             $conn->delete("major_1",[1=>1]);
             $progress->getRegistry()->setValue("state", "N=$n|L=$l|K=$k");
 
@@ -61,7 +60,7 @@ for($n=1;$n<=$N;$n++){ // number of minor tables in test
                 }
                 $conn->commit();
                 $t2=microtime(true);
-                $logger->log($n,$l,$k,$t2-$t1,"1","insert",$conn);
+                $logger->log($n,$l,$k,$t2-$t1,"1","workstation",$conn);
 //                $conn->insert('major_1', array(
 //                    "n"=>$n,
 //                    "l"=>$l,
