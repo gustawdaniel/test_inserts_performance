@@ -1,0 +1,7 @@
+parameters:
+    dbname: 'training'
+    user: 'root'
+    password: ''
+    host: 'localhost'
+    driver: 'pdo_mysql'
+    machine: 'dell'

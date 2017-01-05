@@ -1,6 +1,20 @@
 {
     "require": {
         "doctrine/dbal": "^2.5",
-        "guiguiboy/php-cli-progress-bar": "dev-master"
+        "guiguiboy/php-cli-progress-bar": "dev-master",
+        "incenteev/composer-parameter-handler": "~2.0"
+    },
+    "scripts": {
+        "post-install-cmd": [
+            "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters"
+        ],
+        "post-update-cmd": [
+            "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters"
+        ]
+    },
+    "extra": {
+        "incenteev-parameters": {
+            "file": "config/parameters.yml"
+        }
     }
 }
