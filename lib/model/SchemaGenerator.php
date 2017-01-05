@@ -67,7 +67,7 @@ class SchemaGenerator
         $log = $schema->createTable("log");
         $log->addColumn("id", "integer",array("autoincrement"=>true,"unsigned" => true));
         $log->addColumn("n", "smallint",array("unsigned" => true));  // number of tables
-        $log->addColumn("l", "smallint",array("unsigned" => true));  // number of rows in minor
+        $log->addColumn("l", "integer",array("unsigned" => true));  // number of rows in minor
         $log->addColumn("k", "integer",array("unsigned" => true));   // number of rows in major
         $log->addColumn("v", "string",array()); // number of measurement
         $log->addColumn("t", "float"); // time

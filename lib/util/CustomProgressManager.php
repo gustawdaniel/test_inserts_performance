@@ -39,7 +39,7 @@ EOF;
             $max = $registry->getValue('max');
             $current = $registry->getValue('current');
 
-            return gmdate("H:i:s", intval( $sec * $max / $current ));
+            return gmdate("H:i:s", intval( $sec * $max / ($current) ));
         });
 
         /**
@@ -62,20 +62,12 @@ EOF;
             if (count($advancement) == 1)
                 return 'Calculating...';
 
-            $current               = $registry->getValue('current');
-            $timeForCurrent        = $advancement['now'];
-            $initialTime           = $advancement[0];
-            $seconds               = ($timeForCurrent - $initialTime);
-            $percent               = ($registry->getValue('current') * 100) / $registry->getValue('max');
-            $estimatedTotalSeconds = intval($seconds * 100 / $percent);
+            $seconds               = $advancement['now'] - $advancement[0];
+            $percent               = ($registry->getValue('current')) / $registry->getValue('max');
+            $estimatedTotalSeconds = intval($seconds / ($percent));
 
-            $estimatedSecondsToEnd = $estimatedTotalSeconds - $seconds;
-            $hoursCount            = intval($estimatedSecondsToEnd / 3600);
-            $rest                  = ($estimatedSecondsToEnd % 3600);
-            $minutesCount          = intval($rest / 60);
-            $secondsCount          = ($rest % 60);
+            return gmdate("H:i:s", intval( $estimatedTotalSeconds - $seconds ));
 
-            return sprintf("%02d:%02d:%02d", $hoursCount, $minutesCount, $secondsCount);
         });
     }
 
