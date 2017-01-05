@@ -4,18 +4,17 @@ require_once "vendor/autoload.php";
 require_once 'lib/model/SchemaGenerator.php';
 require_once 'lib/util/CustomProgressManager.php';
 require_once 'lib/util/Logger.php';
-
 use Doctrine\DBAL\DriverManager;
 use Model\SchemaGenerator;
 use Util\CustomProgressManager;
 use Util\Logger;
 
+
 $connectionParams = array(
     'dbname' => 'training',
     'user' => 'root',
     'password' => '',
-    'host' => '127.0.0.1',
-//    'host' => '192.168.43.48',
+    'host' => 'localhost',
     'driver' => 'pdo_mysql',
 );
 //$connectionParams = array(
@@ -32,9 +31,9 @@ $logger = new Logger();
 //$L = 1;
 //$K = 5;
 
-$N = 1;
-$L = 1000000;
-$K = 1;
+$N = 63;
+$L = 50;
+$K = 50;
 
 $progress = new CustomProgressManager(0, $N*$K*$L, 106, '=', ' ', '>');
 $progress->getRegistry()->setValue("state", "Progress");
@@ -42,7 +41,6 @@ $progress->getRegistry()->setValue("state", "Progress");
 //$cc=0;
 
 for($n=1;$n<=$N;$n++){ // number of minor tables in test
-//for($n=$N;$n>=1;$n--){ // number of minor tables in test
 
     $generator = new SchemaGenerator($n);
     $generator->apply($conn,"reset"); // rebuild database and clear it
@@ -54,9 +52,8 @@ for($n=1;$n<=$N;$n++){ // number of minor tables in test
         }
 
         for($k=1;$k<=$K;$k++){//number of rows in major table
-//            $conn->delete("major_1",[1=>1]);
-            $conn->executeUpdate($conn->getDatabasePlatform()->getTruncateTableSQL('major_1', true));
-
+            // $conn->executeUpdate($conn->getDatabasePlatform()->getTruncateTableSQL('major_1', true));
+            $conn->delete("major_1",[1=>1]);
             $progress->getRegistry()->setValue("state", "N=$n|L=$l|K=$k");
 
             $conn->beginTransaction();
@@ -72,7 +69,7 @@ for($n=1;$n<=$N;$n++){ // number of minor tables in test
                 }
                 $conn->commit();
                 $t2=microtime(true);
-                $logger->log($n,$l,$k,$t2-$t1,"test","insert",$conn);
+                $logger->log($n,$l,$k,$t2-$t1,"1","hp",$conn);
 //                $conn->insert('major_1', array(
 //                    "n"=>$n,
 //                    "l"=>$l,
@@ -88,7 +85,6 @@ for($n=1;$n<=$N;$n++){ // number of minor tables in test
                $conn->rollBack();
                 throw $e;
             }
-//            die();
         }
     }
 }
