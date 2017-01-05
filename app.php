@@ -56,7 +56,6 @@ for($n=1;$n<=$N;$n++){ // number of minor tables in test
                         $content['minor_'.$j.'_id'] = rand(1,$l);
                     }
                     $conn->insert('major_1', $content);
-
                 }
                 $conn->commit();
                 $t2=microtime(true);
