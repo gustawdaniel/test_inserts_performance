@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+export LC_ALL=C
 
 cd $(dirname ${BASH_SOURCE[0]}); mkdir -p build;
 
