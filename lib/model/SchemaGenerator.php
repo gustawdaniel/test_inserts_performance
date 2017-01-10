@@ -18,7 +18,12 @@ class SchemaGenerator
     /**
      * @var Table[]
      */
-    private $main, $minor;
+    private $major, $minor;
+
+    /**
+     * @var Table
+     */
+    private $machine;
 
     private $N;
 
@@ -44,18 +49,20 @@ class SchemaGenerator
     /**
      * @param $schema Schema
      */
-    private function appendMainToSchema($schema)
+    private function appendMajorToSchema($schema)
     {
         for($i=1;$i<=2;$i++)
         {
-            $this->main[$i] = $schema->createTable("major_".$i);
-            $this->main[$i]->addColumn("id", "integer");
+            $this->major[$i] = $schema->createTable("major_".$i);
+            $this->major[$i]->addColumn("id", "integer");
             for($j=1;$j<=$this->N;$j++)
             {
-                $this->main[$i]->addColumn("minor_".$j."_id", "integer");
-                $this->main[$i]->addForeignKeyConstraint($this->minor[$j], array("minor_".$j."_id"), array("id"));
+                $this->major[$i]->addColumn("minor_".$j."_id", "integer");
+                $this->major[$i]->addForeignKeyConstraint($this->minor[$j], array("minor_".$j."_id"), array("id"));
+//                echo "----------------------------------------------------------------------\n";
+//                var_dump($this->major[$i]);
             }
-            $this->main[$i]->setPrimaryKey(array("id"));
+            $this->major[$i]->setPrimaryKey(array("id"));
         }
     }
 
@@ -64,15 +71,25 @@ class SchemaGenerator
      */
     private function appendLogToSchema($schema)
     {
+        $this->machine = $schema->createTable("machine");
+        $this->machine->addColumn("id", "guid",[]);
+        $this->machine->addColumn("name", "string",[]);  // number of tables
+        $this->machine->addColumn("write", "float");  // number of rows in minor
+        $this->machine->addColumn("read", "float");  // number of rows in minor
+        $this->machine->addColumn("latency", "float");  // number of rows in minor
+        $this->machine->addColumn("cpu", "float");   // number of rows in major
+        $this->machine->setPrimaryKey(array("id"));
+
         $log = $schema->createTable("log");
-        $log->addColumn("id", "integer",array("autoincrement"=>true,"unsigned" => true));
+//        $log->addColumn("id", "integer",array("autoincrement"=>true,"unsigned" => true));
         $log->addColumn("n", "smallint",array("unsigned" => true));  // number of tables
-        $log->addColumn("l", "smallint",array("unsigned" => true));  // number of rows in minor
+        $log->addColumn("l", "integer",array("unsigned" => true));  // number of rows in minor
         $log->addColumn("k", "integer",array("unsigned" => true));   // number of rows in major
-        $log->addColumn("v", "string",array()); // number of measurement
         $log->addColumn("t", "float"); // time
-        $log->addColumn("message", "string",array()); // description
-        $log->setPrimaryKey(array("id"));
+//        $log->addColumn("message", "string",array()); // description
+        $log->addColumn("machine_id", "guid",[]); // description
+        $log->addForeignKeyConstraint($this->machine, array("machine_id"), array("id"));
+//        $log->setPrimaryKey(array("id"));
     }
 
     /**
@@ -85,7 +102,7 @@ class SchemaGenerator
         $schema=new Schema();
 
         $minor && $this->appendMinorToSchema($schema);
-        $major && $this->appendMainToSchema($schema);
+        $major && $this->appendMajorToSchema($schema);
 
         $this->appendLogToSchema($schema);
 
@@ -110,6 +127,8 @@ class SchemaGenerator
     private function execute(Schema $schema, Connection $conn)
     {
         $queries = (new Comparator())->compare($conn->getSchemaManager()->createSchema(), $schema)->toSql($conn->getDatabasePlatform());
+
+//        var_dump($queries);
 
         foreach($queries as $key => $query) {
             $conn->prepare($query)->execute();

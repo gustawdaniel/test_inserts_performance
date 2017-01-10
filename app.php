@@ -8,56 +8,70 @@ use Doctrine\DBAL\DriverManager;
 use Model\SchemaGenerator;
 use Util\CustomProgressManager;
 use Util\Logger;
+use Symfony\Component\Yaml\Yaml;
 
 
+$config = Yaml::parse(file_get_contents(__DIR__.'/config/parameters.yml'))["parameters"];
 $connectionParams = array(
-    'dbname' => 'training',
-    'user' => 'root',
-    'password' => '',
-    'host' => 'localhost',
-    'driver' => 'pdo_mysql',
+    'dbname' => $config["dbname"],
+    'user' => $config["user"],
+    'password' => $config["password"],
+    'host' => $config["host"],
+    'driver' => $config["driver"],
 );
+//$connectionParams = array(
+//    'dbname' => 'training',
+//    'user' => 'user',
+//    'password' => 'pass',
+//    'host' => '127.0.0.1',
+////    'host' => '192.168.43.48',
+//    'driver' => 'pdo_pgsql',
+//);
 $conn = DriverManager::getConnection($connectionParams);
 $logger = new Logger();
-//$N = 5;
-//$L = 1;
-//$K = 5;
+$N = 5;
+$L = 1;
+$K = 1;
 
-$N = 63;
-$L = 50;
-$K = 50;
+
+//$N = 10;
+//$L = 10;
+//$K = 150;
+
+//$N = 63;
+//$L = 50;
+//$K = 50;
 
 $progress = new CustomProgressManager(0, $N*$K*$L, 106, '=', ' ', '>');
 $progress->getRegistry()->setValue("state", "Progress");
 
 //$cc=0;
 
-for($n=1;$n<=$N;$n++){ // number of minor tables in test
+for($n=1;$n<=$N;$n++) { // number of minor tables in test
 
     $generator = new SchemaGenerator($n);
     $generator->apply($conn); // rebuild database and clear it
 
-    for($l=1;$l<=$L;$l++){ // number of rows minor table
+    for ($l = 1; $l <= $L; $l++) { // number of rows minor table
 
-        for($i=1;$i<=$n;$i++){ // to any minor table
-            $conn->insert('minor_'.$i, array('id' => $l)); // append one row with current key
+        for ($i = 1; $i <= $n; $i++) { // to any minor table
+            $conn->insert('minor_' . $i, array('id' => $l)); // append one row with current key
         }
 
-        for($k=1;$k<=$K;$k++){//number of rows in major table
-            $conn->delete("major_1",[1=>1]);
+        for ($k = 1; $k <= $K; $k++) {//number of rows in major table
+            // $conn->executeUpdate($conn->getDatabasePlatform()->getTruncateTableSQL('major_1', true));
+            $conn->delete("major_1", [1 => 1]);
             $progress->getRegistry()->setValue("state", "N=$n|L=$l|K=$k");
 
             $conn->beginTransaction();
-            try{
-                $t1=microtime(true);
-                for($i=1;$i<=$k;$i++){                // row in table major
-                    $content = ['id'=>$i];
-                    for($j=1;$j<=$n;$j++){            // foreign key of row
-                        $content['minor_'.$j.'_id'] = rand(1,$l);
-                    }
-                    $conn->insert('major_1', $content);
-
+            try {
+            $t1 = microtime(true);
+            for ($i = 1; $i <= $k; $i++) {                // row in table major
+                $content = ['id' => $i];
+                for ($j = 1; $j <= $n; $j++) {            // foreign key of row
+                    $content['minor_' . $j . '_id'] = rand(1, $l);
                 }
+<<<<<<< HEAD
                 $conn->commit();
                 $t2=microtime(true);
                 $logger->log($n,$l,$k,$t2-$t1,"1","hp255",$conn);
@@ -71,12 +85,25 @@ for($n=1;$n<=$N;$n++){ // number of minor tables in test
 //                ));
 
                 $progress->advance();
+=======
+                $conn->insert('major_1', $content);
+
+            }
+            $conn->commit();
+            $t2 = microtime(true);
+            $logger->log($n, $l, $k, $t2 - $t1, $config["guid"], "app", $conn);
+
+            $progress->advance();
+>>>>>>> 4a36480c2f99ef61f9c80527a8f4eba5b197bfdf
 
             } catch(\Exception $e) {
-               $conn->rollBack();
+                $conn->rollBack();
                 throw $e;
             }
+
+
         }
     }
-}
 
+
+}

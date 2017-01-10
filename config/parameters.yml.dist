@@ -1,0 +1,10 @@
+parameters:
+  dbname: 'training'
+  user: 'root'
+  password: ''
+  host: 'localhost'
+  driver: 'pdo_mysql'
+  name: ~
+  appkey: 'wozhg40mmjj3sww'
+  token: ~
+  guid: 00000000-0000-0000-0000-000000000000
