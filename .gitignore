@@ -3,6 +3,6 @@
 config/parameters.yml
 bash/build/*
 
-!/bash/lib
-bash/lib/*
-!bash/lib/.gitkeep
+#!/bash/lib
+#bash/lib/*
+#!bash/lib/.gitkeep

@@ -4,7 +4,7 @@ parameters:
   password: ''
   host: 'localhost'
   driver: 'pdo_mysql'
-  machine: 'dell'
+  name: ~
   appkey: 'wozhg40mmjj3sww'
   token: ~
   guid: 00000000-0000-0000-0000-000000000000

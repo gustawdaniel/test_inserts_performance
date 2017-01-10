@@ -12,12 +12,6 @@ use Symfony\Component\Yaml\Yaml;
 
 
 $config = Yaml::parse(file_get_contents(__DIR__.'/config/parameters.yml'))["parameters"];
-
-
-//$mysqli = @new mysqli($config["host"], $config["user"], $config["pass"], $config["base"], $config["port"]);
-
-//print_r($config);die();
-
 $connectionParams = array(
     'dbname' => $config["dbname"],
     'user' => $config["user"],
@@ -35,7 +29,7 @@ $connectionParams = array(
 //);
 $conn = DriverManager::getConnection($connectionParams);
 $logger = new Logger();
-$N = 3;
+$N = 5;
 $L = 1;
 $K = 1;
 
@@ -58,7 +52,6 @@ for($n=1;$n<=$N;$n++) { // number of minor tables in test
     $generator = new SchemaGenerator($n);
     $generator->apply($conn); // rebuild database and clear it
 
-/*
     for ($l = 1; $l <= $L; $l++) { // number of rows minor table
 
         for ($i = 1; $i <= $n; $i++) { // to any minor table
@@ -81,17 +74,9 @@ for($n=1;$n<=$N;$n++) { // number of minor tables in test
                 $conn->insert('major_1', $content);
 
             }
-                $conn->commit();
+            $conn->commit();
             $t2 = microtime(true);
             $logger->log($n, $l, $k, $t2 - $t1, $config["guid"], "app", $conn);
-//                $conn->insert('major_1', array(
-//                    "n"=>$n,
-//                    "l"=>$l,
-//                    "k"=>$k,
-//                    "t"=>$t2-$t1,
-//                    "machine_id"=>"guid",
-//                    "message"=>"app"
-//                ));
 
             $progress->advance();
 
@@ -103,6 +88,6 @@ for($n=1;$n<=$N;$n++) { // number of minor tables in test
 
         }
     }
-*/
+
 
 }
