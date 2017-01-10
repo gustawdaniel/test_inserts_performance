@@ -5,3 +5,5 @@ parameters:
     host: 'localhost'
     driver: 'pdo_mysql'
     machine: 'dell'
+    appkey: 'wozhg40mmjj3sww'
+    token: ~

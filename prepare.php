@@ -24,6 +24,7 @@ $logger = new Logger();
 //$K = 5;
 
 $scale = 1e4;
+$scale = 1;
 $N = 10;
 $L = 1*$scale;
 $K = 100*$scale;

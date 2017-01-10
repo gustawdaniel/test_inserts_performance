@@ -10,3 +10,11 @@ mysql --execute="CREATE DATABASE IF NOT EXISTS training;"
 
 nano /etc/mysql/mysql.conf.d/mysqld.cnf 
 bind address
+
+
+https://www.dropbox.com/developers/apps
+create
+https://www.dropbox.com/developers/apps/info/ <app_key>
+generate token
+
+
