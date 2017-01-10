@@ -17,4 +17,4 @@ while read p; do
   curl -X POST https://content.dropboxapi.com/2/files/download \
     --header 'Authorization: Bearer 8CqvxAXxLjIAAAAAAAAXadmk8MuiotLEkiHlTqyw0SbKT3QCe4lwxXvwVh02iv6r' \
     --header "Dropbox-API-Arg: {\"path\":$p}";
-done <build/ext_files_list.txt
+done < build/ext_files_list.txt
