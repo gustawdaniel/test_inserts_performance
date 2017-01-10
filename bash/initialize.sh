@@ -2,30 +2,30 @@
 
 cd $(dirname ${BASH_SOURCE[0]}); mkdir -p build;
 
-#rm -rf build/*
-#for i in {1..2}
-#do
-#    sudo hdparm -t --direct /dev/sda1 2>&1 \
-#        | tee /dev/tty \
-#        | awk '/Timing/ {print $11}' >> build/log_read
-#done
-#
-#for i in {1..10}
-#do
-#	dd if=/dev/zero of=build/temp_file bs=8k count=10000 conv=fdatasync 2>&1 \
-#	    | tee /dev/tty \
-#	    | awk '/copied/ {print $10}' >> build/log_write
-#done
-#
-#dd if=/dev/zero of=build/temp_file bs=512 count=100 oflag=dsync 2>&1 \
-#    | tee /dev/tty \
-#    | awk '/copied/ {print $8}' | tr , . >> build/log_lat
-#
-#rm build/temp_file
-#
-#cat /proc/cpuinfo 2>&1 \
-#    | tee /dev/tty \
-#    | awk '/cpu MHz/ {print $4}' > build/log_cpu
+rm -rf build/*
+for i in {1..2}
+do
+    sudo hdparm -t --direct /dev/sda1 2>&1 \
+        | tee /dev/tty \
+        | awk '/Timing/ {print $11}' >> build/log_read
+done
+
+for i in {1..10}
+do
+	dd if=/dev/zero of=build/temp_file bs=8k count=10000 conv=fdatasync 2>&1 \
+	    | tee /dev/tty \
+	    | awk '/copied/ {print $10}' >> build/log_write
+done
+
+dd if=/dev/zero of=build/temp_file bs=512 count=100 oflag=dsync 2>&1 \
+    | tee /dev/tty \
+    | awk '/copied/ {print $8}' | tr , . >> build/log_lat
+
+rm build/temp_file
+
+cat /proc/cpuinfo 2>&1 \
+    | tee /dev/tty \
+    | awk '/cpu MHz/ {print $4}' > build/log_cpu
 
 
 for i in write read lat cpu
