@@ -14,7 +14,7 @@ for i in {1..10}
 do
 	dd if=/dev/zero of=build/temp_file bs=8k count=10000 conv=fdatasync 2>&1 \
 	    | tee /dev/tty \
-	    | awk '/copied/ {print $10}' >> build/log_write
+	    | awk '/copied/ {print $(NF-1)}' >> build/log_write
 done
 
 dd if=/dev/zero of=build/temp_file bs=512 count=100 oflag=dsync 2>&1 \
