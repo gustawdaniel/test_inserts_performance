@@ -1,9 +1,10 @@
 parameters:
-    dbname: 'training'
-    user: 'root'
-    password: ''
-    host: 'localhost'
-    driver: 'pdo_mysql'
-    machine: 'dell'
-    appkey: 'wozhg40mmjj3sww'
-    token: ~
+  dbname: 'training'
+  user: 'root'
+  password: ''
+  host: 'localhost'
+  driver: 'pdo_mysql'
+  machine: 'dell'
+  appkey: 'wozhg40mmjj3sww'
+  token: ~
+  guid: 00000000-0000-0000-0000-000000000000

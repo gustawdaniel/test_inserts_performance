@@ -18,7 +18,7 @@ class SchemaGenerator
     /**
      * @var Table[]
      */
-    private $main, $minor;
+    private $major, $minor;
 
     private $N;
 
@@ -44,38 +44,30 @@ class SchemaGenerator
     /**
      * @param $schema Schema
      */
-    private function appendMainToSchema($schema)
+    private function appendMajorToSchema($schema)
     {
         for($i=1;$i<=2;$i++)
         {
-            $this->main[$i] = $schema->createTable("major_".$i);
-            $this->main[$i]->addColumn("id", "integer");
+            $this->major[$i] = $schema->createTable("major_".$i);
+            $this->major[$i]->addColumn("id", "integer");
             for($j=1;$j<=$this->N;$j++)
             {
-                $this->main[$i]->addColumn("minor_".$j."_id", "integer");
-                $this->main[$i]->addForeignKeyConstraint($this->minor[$j], array("minor_".$j."_id"), array("id"));
+                $this->major[$i]->addColumn("minor_".$j."_id", "integer");
+                $this->major[$i]->addForeignKeyConstraint($this->minor[$j], array("minor_".$j."_id"), array("id"));
+//                echo "----------------------------------------------------------------------\n";
+//                var_dump($this->major[$i]);
             }
-            $this->main[$i]->setPrimaryKey(array("id"));
+            $this->major[$i]->setPrimaryKey(array("id"));
         }
     }
 
-//    /**
-//     * @param $schema Schema
-//     * @return Table
-//     */
-//    private function appendMachineToSchemaAndGetIt($schema)
-//    {
-//
-//
-//        return $machine;
-//    }
+
 
     /**
      * @param $schema Schema
      */
     private function appendLogToSchema($schema)
     {
-//        "autoincrement"=>true, 'strategy'=>'UUID'
         $machine = $schema->createTable("machine");
         $machine->addColumn("id", "guid",array());
         $machine->addColumn("name", "string",[]);  // number of tables
@@ -84,14 +76,6 @@ class SchemaGenerator
         $machine->addColumn("latency", "float");  // number of rows in minor
         $machine->addColumn("cpu", "float");   // number of rows in major
         $machine->setPrimaryKey(array("id"));
-
-
-
-        /**
-         * @ORM\Column(type="guid")
-         * @ORM\Id
-         * @ORM\GeneratedValue(strategy="UUID")
-         */
 
         $log = $schema->createTable("log");
         $log->addColumn("id", "integer",array("autoincrement"=>true,"unsigned" => true));
@@ -103,8 +87,6 @@ class SchemaGenerator
         $log->addColumn("machine_id", "guid"); // description
         $log->addForeignKeyConstraint($machine, array("machine_id"), array("id"));
         $log->setPrimaryKey(array("id"));
-//
-//        $log->addColumn("v", "string",array()); // number of measurement
     }
 
     /**
@@ -117,9 +99,8 @@ class SchemaGenerator
         $schema=new Schema();
 
         $minor && $this->appendMinorToSchema($schema);
-        $major && $this->appendMainToSchema($schema);
+        $major && $this->appendMajorToSchema($schema);
 
-//        $machine = $this->appendMachineToSchemaAndGetIt($schema);
         $this->appendLogToSchema($schema);
 
         return $schema;
@@ -131,7 +112,7 @@ class SchemaGenerator
      */
     public function apply($conn)
     {
-        $this->execute($this->generate(false,false),$conn); // delete all table leaving log only prepare base before regeneration
+//        $this->execute($this->generate(false,false),$conn); // delete all table leaving log only prepare base before regeneration
         $this->execute($this->generate(true,true),$conn); // create all tables
     }
 
@@ -143,6 +124,8 @@ class SchemaGenerator
     private function execute(Schema $schema, Connection $conn)
     {
         $queries = (new Comparator())->compare($conn->getSchemaManager()->createSchema(), $schema)->toSql($conn->getDatabasePlatform());
+
+        var_dump($queries);
 
         foreach($queries as $key => $query) {
             $conn->prepare($query)->execute();

@@ -21,14 +21,16 @@ dd if=/dev/zero of=build/temp_file bs=512 count=10000 oflag=dsync 2>&1 \
     | tee /dev/tty \
     | awk '/copied/ {print $8}' | tr , . >> build/log_lat
 
+rm build/temp_file
+
 cat /proc/cpuinfo 2>&1 \
     | tee /dev/tty \
     | awk '/cpu MHz/ {print $4}' > build/log_cpu
 
 
-for i in log_write log_read log_lat log_cpu
+for i in write read lat cpu
 do
-    concatenatedData+=","$(awk '{ total += $1; count++ } END { print total/count }' build/$i);
+    concatenatedData+=","$(awk '{ total += $1; count++ } END { print total/count }' build/log_$i);
 done
 
 
@@ -38,4 +40,7 @@ eval $(parse_yaml ../config/parameters.yml "config_")
 mysql -u root $config_parameters_dbname -e \
     "INSERT INTO machine (id, name, \`write\`, \`read\`, latency, cpu) VALUES
     (uuid(),'$config_parameters_machine' $concatenatedData)";
+
+sed -i -e "s/guid: [a-z0-9-]*/guid: `mysql -u root $config_parameters_dbname -s -e "SELECT id FROM machine" | cut -f1`/g" \
+    ../config/parameters.yml
 
