@@ -1,5 +1,7 @@
 #!/bin/bash
 
+export LC_ALL=C # all commands in english http://askubuntu.com/questions/264283/switch-command-output-language-from-native-language-to-english
+
 #sudo apt-get install mysql-server
 
 #OLDPWD=`pwd`;
