@@ -37,7 +37,7 @@ done
 . lib/parse_yaml.sh
 eval $(parse_yaml ../config/parameters.yml "config_")
 
-echo $config_parameters_machine;
+#echo $config_parameters_machine;
 
 mysql -u root $config_parameters_dbname -e \
     "TRUNCATE log; DELETE FROM machine;
