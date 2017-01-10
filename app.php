@@ -60,7 +60,7 @@ for($n=1;$n<=$N;$n++){ // number of minor tables in test
                 }
                 $conn->commit();
                 $t2=microtime(true);
-                $logger->log($n,$l,$k,$t2-$t1,"1","workstation",$conn);
+                $logger->log($n,$l,$k,$t2-$t1,"1","hp255",$conn);
 //                $conn->insert('major_1', array(
 //                    "n"=>$n,
 //                    "l"=>$l,
