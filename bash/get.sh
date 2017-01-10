@@ -23,9 +23,10 @@ do
         curl -X POST https://content.dropboxapi.com/2/files/download \
             --header 'Authorization: Bearer 8CqvxAXxLjIAAAAAAAAXadmk8MuiotLEkiHlTqyw0SbKT3QCe4lwxXvwVh02iv6r' \
             --header "Dropbox-API-Arg: {\"path\":\"$p\"}" >> build/${i}.tsv
-        mysqlimport -u root  --local training build/${i}.tsv
 
     done < build/${i}_ext_files_list.txt
+
+    mysqlimport -u root  --local training build/${i}.tsv
 
 done;
 

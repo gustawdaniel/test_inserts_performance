@@ -40,6 +40,9 @@ eval $(parse_yaml ../config/parameters.yml "config_")
 
 #echo $config_parameters_machine;
 
+sed -i -e "s/ name: [a-zA-Z0-9-]*/ name: `uname -n`/g" \
+    ../config/parameters.yml
+
 mysql -u root $config_parameters_dbname -e \
     "TRUNCATE log; DELETE FROM machine;
     INSERT INTO machine (id, name, \`write\`, \`read\`, latency, cpu) VALUES
@@ -48,5 +51,4 @@ mysql -u root $config_parameters_dbname -e \
 sed -i -e "s/guid: [a-z0-9-]*/guid: `mysql -u root $config_parameters_dbname -s -e "SELECT id FROM machine" | cut -f1`/g" \
     ../config/parameters.yml
 
-sed -i -e "s/ name: [a-zA-Z0-9-]*/ name: `uname -n`/g" \
-    ../config/parameters.yml
+

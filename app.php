@@ -29,18 +29,18 @@ $connectionParams = array(
 //);
 $conn = DriverManager::getConnection($connectionParams);
 $logger = new Logger();
-$N = 5;
-$L = 1;
-$K = 1;
+//$N = 5;
+//$L = 1;
+//$K = 1;
 
 
 //$N = 10;
 //$L = 10;
 //$K = 150;
 
-//$N = 63;
-//$L = 50;
-//$K = 50;
+$N = 63;
+$L = 50;
+$K = 50;
 
 $progress = new CustomProgressManager(0, $N*$K*$L, 106, '=', ' ', '>');
 $progress->getRegistry()->setValue("state", "Progress");
