@@ -29,7 +29,7 @@ class Logger
             "k"=>$k,
             "t"=>$t,
             "machine_id"=>$machineId,
-            "message"=>$message
+//            "message"=>$message
         ));
     }
 }
