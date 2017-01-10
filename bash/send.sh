@@ -11,7 +11,7 @@ do
 
     curl -X POST https://content.dropboxapi.com/2/files/upload \
     --header "Authorization: Bearer $config_parameters_token" \
-    --header "Dropbox-API-Arg: {\"path\": \"/${i}_$config_parameters_guid.txt\",\"mode\": \"overwrite\",\"autorename\": false,\"mute\": false}" \
+    --header "Dropbox-API-Arg: {\"path\": \"/${i}/$config_parameters_guid.txt\",\"mode\": \"overwrite\",\"autorename\": false,\"mute\": false}" \
     --header "Content-Type: application/octet-stream" \
     --data-binary @build/${i}.tsv
 done
