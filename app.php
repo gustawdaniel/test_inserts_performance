@@ -65,36 +65,19 @@ for($n=1;$n<=$N;$n++) { // number of minor tables in test
 
             $conn->beginTransaction();
             try {
-            $t1 = microtime(true);
-            for ($i = 1; $i <= $k; $i++) {                // row in table major
-                $content = ['id' => $i];
-                for ($j = 1; $j <= $n; $j++) {            // foreign key of row
-                    $content['minor_' . $j . '_id'] = rand(1, $l);
+                $t1 = microtime(true);
+                for ($i = 1; $i <= $k; $i++) {                // row in table major
+                    $content = ['id' => $i];
+                    for ($j = 1; $j <= $n; $j++) {            // foreign key of row
+                        $content['minor_' . $j . '_id'] = rand(1, $l);
+                    }
+                    $conn->insert('major_1', $content);
                 }
-<<<<<<< HEAD
                 $conn->commit();
-                $t2=microtime(true);
-                $logger->log($n,$l,$k,$t2-$t1,"1","hp255",$conn);
-//                $conn->insert('major_1', array(
-//                    "n"=>$n,
-//                    "l"=>$l,
-//                    "k"=>$k,
-//                    "t"=>$t2-$t1,
-//                    "v"=>"1",
-//                    "message"=>"ins"
-//                ));
+                $t2 = microtime(true);
+                $logger->log($n, $l, $k, $t2 - $t1, $config["guid"], "app", $conn);
 
                 $progress->advance();
-=======
-                $conn->insert('major_1', $content);
-
-            }
-            $conn->commit();
-            $t2 = microtime(true);
-            $logger->log($n, $l, $k, $t2 - $t1, $config["guid"], "app", $conn);
-
-            $progress->advance();
->>>>>>> 4a36480c2f99ef61f9c80527a8f4eba5b197bfdf
 
             } catch(\Exception $e) {
                 $conn->rollBack();
