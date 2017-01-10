@@ -81,15 +81,15 @@ class SchemaGenerator
         $this->machine->setPrimaryKey(array("id"));
 
         $log = $schema->createTable("log");
-        $log->addColumn("id", "integer",array("autoincrement"=>true,"unsigned" => true));
+//        $log->addColumn("id", "integer",array("autoincrement"=>true,"unsigned" => true));
         $log->addColumn("n", "smallint",array("unsigned" => true));  // number of tables
         $log->addColumn("l", "integer",array("unsigned" => true));  // number of rows in minor
         $log->addColumn("k", "integer",array("unsigned" => true));   // number of rows in major
         $log->addColumn("t", "float"); // time
-        $log->addColumn("message", "string",array()); // description
+//        $log->addColumn("message", "string",array()); // description
         $log->addColumn("machine_id", "guid",[]); // description
         $log->addForeignKeyConstraint($this->machine, array("machine_id"), array("id"));
-        $log->setPrimaryKey(array("id"));
+//        $log->setPrimaryKey(array("id"));
     }
 
     /**
