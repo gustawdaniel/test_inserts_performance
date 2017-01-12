@@ -3,11 +3,9 @@
 require_once "vendor/autoload.php";
 require_once 'lib/model/SchemaGenerator.php';
 require_once 'lib/util/CustomProgressManager.php';
-require_once 'lib/util/Logger.php';
 use Doctrine\DBAL\DriverManager;
 use Model\SchemaGenerator;
 use Util\CustomProgressManager;
-use Util\Logger;
 use Symfony\Component\Yaml\Yaml;
 
 
@@ -21,7 +19,6 @@ $connectionParams = array(
 );
 
 $conn = DriverManager::getConnection($connectionParams);
-$logger = new Logger();
 
 //$N = 2; $L = 10; $K = 5; $lStep=10;// option for test
 $N = 63; $L = 50; $K = 50; $lStep=1000;
