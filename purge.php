@@ -19,3 +19,5 @@ $n=0;
 
 $generator = new SchemaGenerator($n);
 $generator->apply($conn); // rebuild database and clear it
+$conn->delete('log',[1=>1]);
+$conn->delete('machine',[1=>1]);
