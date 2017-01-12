@@ -19,33 +19,19 @@ $connectionParams = array(
     'host' => $config["host"],
     'driver' => $config["driver"],
 );
-//$connectionParams = array(
-//    'dbname' => 'training',
-//    'user' => 'user',
-//    'password' => 'pass',
-//    'host' => '127.0.0.1',
-////    'host' => '192.168.43.48',
-//    'driver' => 'pdo_pgsql',
-//);
+
 $conn = DriverManager::getConnection($connectionParams);
 $logger = new Logger();
-//$N = 5;
-//$L = 1;
-//$K = 1;
 
-
-//$N = 10;
-//$L = 10;
-//$K = 150;
-
-$N = 63;
-$L = 50;
-$K = 50;
+//$N = 2; $L = 10; $K = 5; $lStep=10;// option for test
+$N = 63; $L = 50; $K = 50; $lStep=1000;
 
 $progress = new CustomProgressManager(0, $N*$K*$L, 106, '=', ' ', '>');
 $progress->getRegistry()->setValue("state", "Progress");
 
-//$cc=0;
+$doTestStmt=$conn->prepare("CALL do_test(?,?,?,?)");
+
+
 
 for($n=1;$n<=$N;$n++) { // number of minor tables in test
 
@@ -55,38 +41,25 @@ for($n=1;$n<=$N;$n++) { // number of minor tables in test
     for ($l = 1; $l <= $L; $l++) { // number of rows minor table
 
         for ($i = 1; $i <= $n; $i++) { // to any minor table
-            $conn->insert('minor_' . $i, array('id' => $l)); // append one row with current key
+            for($j=1;$j<=$lStep;$j++) {
+                $conn->insert('minor_' . $i, array('id' => null)); // append one row with current key
+            }
         }
 
         for ($k = 1; $k <= $K; $k++) {//number of rows in major table
-            // $conn->executeUpdate($conn->getDatabasePlatform()->getTruncateTableSQL('major_1', true));
-            $conn->delete("major_1", [1 => 1]);
             $progress->getRegistry()->setValue("state", "N=$n|L=$l|K=$k");
 
-            $conn->beginTransaction();
-            try {
-                $t1 = microtime(true);
-                for ($i = 1; $i <= $k; $i++) {                // row in table major
-                    $content = ['id' => $i];
-                    for ($j = 1; $j <= $n; $j++) {            // foreign key of row
-                        $content['minor_' . $j . '_id'] = rand(1, $l);
-                    }
-                    $conn->insert('major_1', $content);
-                }
-                $conn->commit();
-                $t2 = microtime(true);
-                $logger->log($n, $l, $k, $t2 - $t1, $config["guid"], "app", $conn);
+            $t1 = microtime(true);
+            $doTestStmt->bindValue(1,$n);
+            $doTestStmt->bindValue(2,$l*$lStep);
+            $doTestStmt->bindValue(3,$k);
+            $doTestStmt->bindValue(4,$config["guid"]);
+            $doTestStmt->execute();
+            $doTestStmt->closeCursor();
+            $t2 = microtime(true);
 
-                $progress->advance();
-
-            } catch(\Exception $e) {
-                $conn->rollBack();
-                throw $e;
-            }
-
-
+            $conn->insert('log', array("n"=>$n, "l"=>$l*$lStep, "k"=>$k, "t"=>$t2-$t1, "machine_id"=>$config["guid"], "message"=>"app"));
+            $progress->advance();
         }
     }
-
-
 }

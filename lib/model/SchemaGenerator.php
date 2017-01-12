@@ -41,7 +41,7 @@ class SchemaGenerator
     {
         for($i=1;$i<=$this->N;$i++) {
             $this->minor[$i] = $schema->createTable("minor_".$i);
-            $this->minor[$i]->addColumn("id", "integer");
+            $this->minor[$i]->addColumn("id", "integer",array("autoincrement"=>true,"unsigned" => true));
             $this->minor[$i]->setPrimaryKey(array("id"));
         }
     }
@@ -54,15 +54,15 @@ class SchemaGenerator
         for($i=1;$i<=2;$i++)
         {
             $this->major[$i] = $schema->createTable("major_".$i);
-            $this->major[$i]->addColumn("id", "integer");
+//            $this->major[$i]->addColumn("id", "integer");
             for($j=1;$j<=$this->N;$j++)
             {
-                $this->major[$i]->addColumn("minor_".$j."_id", "integer");
+                $this->major[$i]->addColumn("minor_".$j."_id", "integer",array("unsigned"=>true));
                 $this->major[$i]->addForeignKeyConstraint($this->minor[$j], array("minor_".$j."_id"), array("id"));
 //                echo "----------------------------------------------------------------------\n";
 //                var_dump($this->major[$i]);
             }
-            $this->major[$i]->setPrimaryKey(array("id"));
+//            $this->major[$i]->setPrimaryKey(array("id"));
         }
     }
 
@@ -86,7 +86,7 @@ class SchemaGenerator
         $log->addColumn("l", "integer",array("unsigned" => true));  // number of rows in minor
         $log->addColumn("k", "integer",array("unsigned" => true));   // number of rows in major
         $log->addColumn("t", "float"); // time
-//        $log->addColumn("message", "string",array()); // description
+        $log->addColumn("message", "string"); // description
         $log->addColumn("machine_id", "guid",[]); // description
         $log->addForeignKeyConstraint($this->machine, array("machine_id"), array("id"));
 //        $log->setPrimaryKey(array("id"));
