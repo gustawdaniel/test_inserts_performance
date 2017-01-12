@@ -15,9 +15,12 @@ $connectionParams = array(
 );
 $conn = DriverManager::getConnection($connectionParams);
 
-$n=0;
+$n=1;
 
 $generator = new SchemaGenerator($n);
 $generator->apply($conn); // rebuild database and clear it
 $conn->delete('log',[1=>1]);
 $conn->delete('machine',[1=>1]);
+$conn->delete('major_1',[1=>1]);
+$conn->delete('major_2',[1=>1]);
+$conn->delete('minor_1',[1=>1]);
