@@ -7,7 +7,7 @@ eval $(parse_yaml ../config/parameters.yml "config_")
 
 for i in log machine
 do
-    mysql -uroot training -e "select * from $i" -B | tail -n +2 > build/$i.tsv
+    mysql -u $config_parameters_user $config_parameters -e "select * from $i" -B | tail -n +2 > build/$i.tsv
 
     curl -X POST https://content.dropboxapi.com/2/files/upload \
     --header "Authorization: Bearer $config_parameters_token" \

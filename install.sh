@@ -24,7 +24,8 @@ composer install;
 . bash/lib/parse_yaml.sh
 eval $(parse_yaml config/parameters.yml "config_")
 
-mysql -u root -e "CREATE DATABASE IF NOT EXISTS $config_parameters_dbname";
+mysql -u $config_parameters_user -e "CREATE DATABASE IF NOT EXISTS $config_parameters_dbname";
+mysql -u $config_parameters_user $config_parameters_dbname < sql/do_test_procedure.sql;
 php purge.php
 
 echo "Next step: bash bash/initialize.sh";

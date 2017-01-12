@@ -5,7 +5,7 @@ cd $(dirname ${BASH_SOURCE[0]});
 . lib/parse_yaml.sh
 eval $(parse_yaml ../config/parameters.yml "config_")
 
-    mysql -u root $config_parameters_dbname -e \
+    mysql -u $config_parameters_user $config_parameters_dbname -e \
         "TRUNCATE log; DELETE FROM machine";
 
 for i in machine log
@@ -26,7 +26,7 @@ do
 
     done < build/${i}_ext_files_list.txt
 
-    mysqlimport -u root  --local training build/${i}.tsv
+    mysqlimport -u $config_parameters_user  --local $config_parameters_dbname build/${i}.tsv
 
 done;
 

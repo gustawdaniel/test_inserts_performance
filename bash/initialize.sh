@@ -43,7 +43,7 @@ eval $(parse_yaml ../config/parameters.yml "config_")
 sed -i -e "s/ name: [a-zA-Z0-9-]*/ name: `uname -n`/g" \
     ../config/parameters.yml
 
-mysql -u root $config_parameters_dbname -e \
+mysql -u $config_parameters_user $config_parameters_dbname -e \
     "TRUNCATE log; DELETE FROM machine;
     INSERT INTO machine (id, name, \`write\`, \`read\`, latency, cpu) VALUES
     (uuid(),'$config_parameters_name' $concatenatedData)";
